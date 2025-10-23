@@ -2,6 +2,9 @@
 ecs235a_textbook.pdf
 slides/
 
+# Data files
+*.mat
+
 # MacOS
 .DS_Store
 
