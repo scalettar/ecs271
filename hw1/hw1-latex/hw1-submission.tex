@@ -76,6 +76,7 @@ All the attributes we observed in the class so far for decision tree are binary 
 % Why memorizing the training data and doing table lookups is a bad strategy for learning? How do we prevent that in decision trees?
 \textit{Why using the training data as a dictionary or lookup table and referring to it is a bad strategy for learning? What is it called? How do we prevent it?}
 
+% \begin{solution}
 Using the training data as a dictionary or lookup table and referring to it is a bad strategy for learning because it will fail to generalize to unseen data.
 The analogy covered in class was of a student memorizing answers to questions she has seen in lectures instead of understanding the underlying concepts.
 When presented with new questions on an exam which are similar but not identical, the student will struggle to answer them correctly.
@@ -83,23 +84,33 @@ When presented with new questions on an exam which are similar but not identical
 This phenomenon is known as \textbf{overfitting} where a model learns the training data too specifically including noise and outliers,
 rather than capturing the general patterns that would allow it to perform well on new data.
 
-We can utilize several strategies to prevent overfitting in decision trees:
-\begin{itemize}
-	\item \textbf{Validation Set}: We can split the training data into an additional validation set. For example, we can have 60\% training, 20\% validation, and 20\% testing.
-	      We perform training on the training set, but then evaluate the model's performance on the validation set.
-	      If the error on the validation set starts increasing while the training error continues decreasing, it indicates overfitting.
-	\item \textbf{}
-\end{itemize}
-
-
-
-% \begin{solution}
-% "if you tell the truth, you don't have to remember anything" - Mark twain
+To address this, we can split the training data into an additional validation set.
+For example, instead of 60\% training and 40\% testing, we can have 60\% training, 20\% validation, and 20\% testing.
+We perform training on the training set, but then evaluate the model's performance on the validation set.
+If the error on the validation set starts increasing while the training error continues decreasing, it indicates overfitting and we can stop training.
 % \end{solution}
 
 \section{Visualize}
 \textit{What does the decision boundary of 1-nearest neighbor classifier for 2 classes (one positive, one negative) look like when the features are 1-D? How about 2-D and 3-D? Can you give a general form?}
 % \begin{solution}
+
+In a 1-nearest neighbor classifier for 2 classes, a test point is classified based on the class of its closest training point.
+Therefore, the decision boundary is the set of points that are equidistant to the nearest training data points from each class.
+
+In 1-D, this means the boundary is a set of points each located halfway between every pair of adjacent training points from different classes.
+For example, suppose from our training data we have a positive label point at $x=2$, a negative label point at $x=6$, and a positive label point at $x=8$.
+The decision boundaries would be at $x=4$ (midpoint between 2 and 6) and $x=7$ (midpoint between 6 and 8).
+This means any point less than 4 would be classified as positive, points between 4 and 7 would be classified as negative, and points greater than 7 would be classified as positive.
+
+In 2-D, the decision boundary is a set of line segments that are the perpendicular bisectors of the line between every pair of nearest training points from different classes.
+For example, if we have a positive point at (1,1) and a negative point at (3,3) which are the closest positive and negative point to each other,
+the line segment of the decision boundary for these two points would be a line through the midpoint (2,2), perpendicular to the line connecting (1,1) and (3,3).
+
+In 3-D, the decision boundary is a set of planes that are the perpendicular bisectors of the line between every pair of nearest training points from different classes.
+For example, if we have a positive point at (1,1,1) and a negative point at (3,3,3) which are the closest positive and negative point to each other,
+the plane of the decision boundary for these two points would be a plane through the midpoint (2,2,2), perpendicular to the line connecting (1,1,1) and (3,3,3).
+
+By extension, for each feature dimension $D$, the decision boundary is a set of $(D-1)$-dimensional hyperplanes that split the space between the nearest pair of training points from different classes.
 % \end{solution}
 
 \section{kNN and data manipulation}
