@@ -123,14 +123,14 @@ we can ask whether the transformation impacts the relative distances between poi
 In other words, if the transformation preserves the order of distances between points,
 then the kNN classifier's predictions will remain unchanged, and thus the accuracy will not change.
 
-For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be their transformed versions, $c$ be a constant scalar, $\vec{t}$ be a translation vector, and $R$ be a rotation matrix.
+For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be their transformed versions, $c$ be a constant scalar, $t$ be a translation vector, and $R$ be a rotation matrix.
 
 \begin{enumerate}
 	\item \textbf{Euclidean Distance:} d(p, q) = $\sqrt{\sum_i (p_i - q_i)^2}$ = $\norm{p - q}_2$
 	      \begin{itemize}
 		      \item (a) \textbf{Translate}
 
-		            d($p_t$, $q_t$) = $\norm{(p + \vec{t}) - (q + \vec{t})}_2$ = $\norm{p - q + \vec{t}  - \vec{t}}_2$ = $\norm{p - q}_2$ = d(p, q).
+		            d($p_t$, $q_t$) = $\norm{(p + t) - (q + t)}_2$ = $\norm{p - q + t  - t}_2$ = $\norm{p - q}_2$ = d(p, q).
 
 		            d($p_t$, $q_t$) = d(p, q).
 
@@ -151,25 +151,90 @@ For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be th
 
 		            d($p_t$, $q_t$) = $\norm{R p - R q}_2$ = $\norm{R (p - q)}_2$.
 
-		            Since rotation matrices are norm preserving, $\norm{R (p - q)}_2$ = $\norm{p - q}_2$ = d(p, q).
+		            For Euclidean distance, rotation matrices are norm preserving: $\norm{R x}_2$ = $\norm{x}_2$ for any vector $x$.
+
+		            Therefore, $\norm{R (p - q)}_2$ = $\norm{p - q}_2$ = d(p, q).
 
 		            d($p_t$, $q_t$) = d(p, q).
 
 		            \textbf{No change in accuracy.}
 	      \end{itemize}
 
-	\item \textbf{Manhattan Distance:}
+	\item \textbf{Manhattan Distance:} d(p, q) = $\sum_i |p_i - q_i|$ = $\norm{p - q}_1$
 	      \begin{itemize}
-		      \item (a) \textbf{Translate:}
-		      \item (b) \textbf{Scale:}
-		      \item (c) \textbf{Rotate:}
+		      \item (a) \textbf{Translate}
+
+		            d($p_t$, $q_t$) = $\norm{(p + t) - (q + t)}_1$ = $\norm{p - q + t  - t}_1$ = $\norm{p - q}_1$ = d(p, q).
+
+		            d($p_t$, $q_t$) = d(p, q).
+
+		            \textbf{No change in accuracy.}
+
+		      \item (b) \textbf{Scale}
+
+		            d($p_t$, $q_t$) = $\norm{(c p) - (c q)}_1$ = $\norm{c (p - q)}_1$ = $|c| \norm{p - q}_1$ = $|c|$ d(p, q).
+
+		            d($p_t$, $q_t$) = $|c|$ d(p, q).
+
+		            After the scaling transformation, the distances are simply scaled by $|c|$.
+		            This means that the relative ordering of distances between points remains unchanged and therefore there is no change in accuracy.
+
+		            \textbf{No change in accuracy.}
+
+		      \item (c) \textbf{Rotate}
+
+		            d($p_t$, $q_t$) = $\norm{R p - R q}_1$ = $\norm{R (p - q)}_1$.
+
+		            Unlike Euclidean distance, rotation does not preserve Manhattan distance.
+
+		            An intuitive example is to consider the set of all points with an L2 distance of 1 from the origin, which forms a circle in 2D.
+		            When rotated, the points remain on the circle with radius 1, thus Euclidean distances between points remain unchanged.
+		            However, the set of all points with an L1 distance of 1 from the origin forms a diamond shape.
+		            When this diamond is rotated, the distances between points change.
+
+		            For example, originally the points $p_1 = (1,0)$ and $p_2 = (0.5,0.5)$ both have an L1 distance of 1 from the origin.
+		            After a 45-degree rotation, the equivalent points become $p_{1t} \approx (0.707,0.707)$ and $p_{2t} \approx (0 ,0.707)$.
+
+		            The new L1 distances from the origin are:
+		            \begin{itemize}
+			            \item d($p_{1t}$, origin) $\approx |0.707| + |0.707| \approx 1.414$
+			            \item d($p_{2t}$, origin) $\approx |0| + |0.707| = 0.707$
+		            \end{itemize}
+
+		            After rotation, the original distances (both 1) are not equal to the new distances (approximately 1.414 and 0.707).
+		            This demonstrates that rotation can change the relative Manhattan distances between points.
+
+		            Therefore, the relative ordering of nearest neighbors may be impacted, affecting the accuracy of kNN.
+
+		            \textbf{Change in accuracy is possible.}
 	      \end{itemize}
 
-	\item \textbf{Cosine Distance:}
+	\item \textbf{Cosine Distance:} d(p, q) = 1 - $\frac{p \cdot q}{\norm{p}_2 \norm{q}_2}$
 	      \begin{itemize}
-		      \item (a) \textbf{Translate:}
-		      \item (b) \textbf{Scale:}
-		      \item (c) \textbf{Rotate:}
+		      \item (a) \textbf{Translate}
+
+		            d($p_t$, $q_t$) = 1 - $\frac{(p + t) \cdot (q + t)}{\norm{p + t}_2 \norm{q + t}_2}$.
+
+		            The translation affects both the numerator and denominator in a non-trivial way.
+		            Therefore, the relative ordering of distances between points may change.
+
+		            \textbf{Change in accuracy possible.}
+
+		      \item (b) \textbf{Scale}
+
+		            d($p_t$, $q_t$) = 1 - $\frac{(c p) \cdot (c q)}{\norm{c p}_2 \norm{c q}_2}$ = 1 - $\frac{c^2 (p \cdot q)}{|c| \norm{p}_2 |c| \norm{q}_2}$ = 1 - $\frac{p \cdot q}{\norm{p}_2 \norm{q}_2}$ = d(p, q).
+
+		            d($p_t$, $q_t$) = d(p, q).
+
+		            \textbf{No change in accuracy.}
+
+		      \item (c) \textbf{Rotate}
+
+		            d($p_t$, $q_t$) = 1 - $\frac{(R p) \cdot (R q)}{\norm{R p}_2 \norm{R q}_2}$ = 1 - $\frac{p \cdot q}{\norm{p}_2 \norm{q}_2}$ = d(p, q).
+
+		            d($p_t$, $q_t$) = d(p, q).
+
+		            \textbf{No change in accuracy.}
 	      \end{itemize}
 \end{enumerate}
 % \end{solution}
