@@ -92,8 +92,8 @@ If the error on the validation set starts increasing while the training error co
 
 \section{Visualize}
 \textit{What does the decision boundary of 1-nearest neighbor classifier for 2 classes (one positive, one negative) look like when the features are 1-D? How about 2-D and 3-D? Can you give a general form?}
-% \begin{solution}
 
+% \begin{solution}
 In a 1-nearest neighbor classifier for 2 classes, a test point is classified based on the class of its closest training point.
 Therefore, the decision boundary is the set of points that are equidistant to the nearest training data points from each class.
 
@@ -115,7 +115,63 @@ By extension, for each feature dimension $D$, the decision boundary is a set of 
 
 \section{kNN and data manipulation}
 \textit{Does the accuracy of a kNN classifier using the Euclidean distance change if you:(a) translate the data (b) scale the data (i.e., multiply all the points by a constant), or (c) rotate the data? Explain. Answer the same for a kNN classifier using Manhattan distance\footnote{\url{http://en.wikipedia.org/wiki/Taxicab_geometry}} and Cosine Distance\footnote{\url{https://en.wikipedia.org/wiki/Cosine_similarity}}. Make sure you provide mathematical proofs or at least some intuition that why your claim is correct.}
+
 % \begin{solution}
+To determine whether the accuracy of a kNN classifier changes under data transformations,
+we can ask whether the transformation impacts the relative distances between points and thus the nearest neighbors.
+
+In other words, if the transformation preserves the order of distances between points,
+then the kNN classifier's predictions will remain unchanged, and thus the accuracy will not change.
+
+For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be their transformed versions, $c$ be a constant scalar, $\vec{t}$ be a translation vector, and $R$ be a rotation matrix.
+
+\begin{enumerate}
+	\item \textbf{Euclidean Distance:} d(p, q) = $\sqrt{\sum_i (p_i - q_i)^2}$ = $\norm{p - q}_2$
+	      \begin{itemize}
+		      \item (a) \textbf{Translate}
+
+		            d($p_t$, $q_t$) = $\norm{(p + \vec{t}) - (q + \vec{t})}_2$ = $\norm{p - q + \vec{t}  - \vec{t}}_2$ = $\norm{p - q}_2$ = d(p, q).
+
+		            d($p_t$, $q_t$) = d(p, q).
+
+		            \textbf{No change in accuracy.}
+
+		      \item (b) \textbf{Scale}
+
+		            d($p_t$, $q_t$) = $\norm{(c p) - (c q)}_2$ = $\norm{c (p - q)}_2$ = $|c| \norm{p - q}_2$ = $|c|$ d(p, q).
+
+		            d($p_t$, $q_t$) = $|c|$ d(p, q).
+
+		            After the scaling transformation, the distances are simply scaled by $|c|$.
+		            This means that the relative ordering of distances between points remains unchanged and therefore there is no change in accuracy.
+
+		            \textbf{No change in accuracy.}
+
+		      \item (c) \textbf{Rotate}
+
+		            d($p_t$, $q_t$) = $\norm{R p - R q}_2$ = $\norm{R (p - q)}_2$.
+
+		            Since rotation matrices are norm preserving, $\norm{R (p - q)}_2$ = $\norm{p - q}_2$ = d(p, q).
+
+		            d($p_t$, $q_t$) = d(p, q).
+
+		            \textbf{No change in accuracy.}
+	      \end{itemize}
+
+	\item \textbf{Manhattan Distance:}
+	      \begin{itemize}
+		      \item (a) \textbf{Translate:}
+		      \item (b) \textbf{Scale:}
+		      \item (c) \textbf{Rotate:}
+	      \end{itemize}
+
+	\item \textbf{Cosine Distance:}
+	      \begin{itemize}
+		      \item (a) \textbf{Translate:}
+		      \item (b) \textbf{Scale:}
+		      \item (c) \textbf{Rotate:}
+	      \end{itemize}
+\end{enumerate}
 % \end{solution}
 
 \section{Coding}
