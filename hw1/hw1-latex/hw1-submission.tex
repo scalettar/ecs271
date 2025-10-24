@@ -151,7 +151,7 @@ For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be th
 
 		            d($p_t$, $q_t$) = $\norm{R p - R q}_2$ = $\norm{R (p - q)}_2$.
 
-		            For Euclidean distance, rotation matrices are norm preserving: $\norm{R x}_2$ = $\norm{x}_2$ for any vector $x$.
+		            Utilizing the fact that rotation matrices preserve L2-norms ($\norm{Rv}_2$ = $\norm{v}_2$ for any vector $v$).
 
 		            Therefore, $\norm{R (p - q)}_2$ = $\norm{p - q}_2$ = d(p, q).
 
@@ -216,7 +216,22 @@ For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be th
 		            d($p_t$, $q_t$) = 1 - $\frac{(p + t) \cdot (q + t)}{\norm{p + t}_2 \norm{q + t}_2}$.
 
 		            The translation affects both the numerator and denominator in a non-trivial way.
-		            Therefore, the relative ordering of distances between points may change.
+
+		            An intuitive way to think about this is that cosine distance measures the angle between two vectors from the origin.
+		            When we translate points p and q by vector t, we are potentially changing their directions relative to the origin and thus changing the angle between them.
+
+		            Let's consider a simple example in 2D:
+		            \begin{itemize}
+			            \item Let p = (1, 0) and q = (0, 1)
+
+			                  The cosine distance d(p, q) = 1 - $\frac{(1)(0) + (0)(1)}{\sqrt{1^2 + 0^2} \sqrt{0^2 + 1^2}}$ = 1 - 0 = 1.
+			            \item Now, translate both points by t = (1, 1) such that $p_t$ = (2, 1) and $q_t$ = (1, 2)
+
+			                  The cosine distance d($p_t$, $q_t$) = 1 - $\frac{(2)(1) + (1)(2)}{\sqrt{2^2 + 1^2} \sqrt{1^2 + 2^2}}$ = 1 - $\frac{4}{\sqrt{5} \sqrt{5}}$ = 1 - $\frac{4}{5}$ = 0.2.
+		            \end{itemize}
+
+		            The original cosine distance was 1, but after translation it became 0.2.
+		            Therefore, since translation changes the cosine distance between points, the relative ordering of nearest neighbors may be affected, impacting the accuracy of kNN.
 
 		            \textbf{Change in accuracy possible.}
 
@@ -226,13 +241,23 @@ For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be th
 
 		            d($p_t$, $q_t$) = d(p, q).
 
+		            Intuitively, scaling (increasing the magnitude of the vectors) does not change the angle between them.
+
 		            \textbf{No change in accuracy.}
 
 		      \item (c) \textbf{Rotate}
 
+		            Utilizing the fact that rotation matrices preserve:
+		            \begin{itemize}
+			            \item \textbf{dot products:} $(Rv) \cdot (Ru) = v \cdot u$)
+			            \item \textbf{L2-norms:} ($\norm{Rv}_2$ = $\norm{v}_2$
+		            \end{itemize}
+
 		            d($p_t$, $q_t$) = 1 - $\frac{(R p) \cdot (R q)}{\norm{R p}_2 \norm{R q}_2}$ = 1 - $\frac{p \cdot q}{\norm{p}_2 \norm{q}_2}$ = d(p, q).
 
 		            d($p_t$, $q_t$) = d(p, q).
+
+		            Intuitively, rotation changes the direction of vectors by the same amount so the angle between them remains unchanged.
 
 		            \textbf{No change in accuracy.}
 	      \end{itemize}
