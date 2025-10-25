@@ -22,32 +22,32 @@
 % of class beefing up on elementary math. I would strongly suggest going through this math tutorial by Hal Daume:
 % https://web.cs.ucdavis.edu/\%7Ehpirsiav/courses/MLf23/math4ml.pdf
 
-I was familiar with all of the concepts at some point and am reviewing those in which I am rusty.
+I have learned all the content in the past, but I am reviewing the concepts I have not used recently.
 
 \section{Continuous Variable vs Discrete Variables}
-All the attributes we observed in the class so far for decision tree are binary like "Is it Morning?". Now lets assume that our attributes are numerical.
+\textit{All the attributes we observed in the class so far for decision tree are binary like "Is it Morning?". Now lets assume that our attributes are numerical.}
 % In class, we looked at an example where all the attributes were binary (i.e., yes/no valued). Consider an example where instead of the attribute ``Morning?", we had an attribute ``Time" which specifies when the class begins.
 \begin{enumerate}
 	\item \textit{Let's say we want to consider the \textbf{Time} on which the class begins. One can argue that we can pick a threshold $\tau$ and use (Time $< \tau$)? as a criteria to split the data in two and make a binary tree. Explain how you might pick the optimal value of $\tau$.}
 
-	      For a continuous attribute like \textbf{Time}, we can consider all the unique values of \textbf{Time} in our training data.
+	      For a continuous attribute like \textbf{Time}, we first consider the unique values of \textbf{Time} in our training data.
 	      For example, the training data may have times 9:00, 11:00, 12:00, and 16:00.
 	      Unlike the yes/no case where we only have a single potential boundary, we now can consider splitting at any time between the times in our training data.
 	      A simple way to do this would be to take the midpoint between each pair of consecutive unique values in the training data.
-	      In our example, this would mean our candidates for $\tau$ would be 10:00 (between 9:00 and 11:00), 11:30 (between 11:00 and 12:00), or 14:00 (between 12:00 and 16:00).
-	      We can then evaluate each candidate $\tau$ as we did for binary attributes, but this time across all candidate thresholds of a continuous attribute.
+	      In our example, our candidates for $\tau$ would be 10:00 (between 9:00 and 11:00), 11:30 (between 11:00 and 12:00), or 14:00 (between 12:00 and 16:00).
+	      We can then evaluate each candidate $\tau$ as we did for binary attributes, but this time across all candidate thresholds of our continuous attribute.
 	      In other words, we assign a score like misclassification error (what we did in lecture) to each candidate $\tau$ and pick the one that optimizes our chosen score.
 
 	\item \textit{In the decision tree learning algorithm discussed in class, once a binary attribute is used, the subtrees do not need to consider it anymore. Explain why in using continuous attributes this may not be the case.}
 	      % \item Now, lets look at a simple problem. Suppose you know that the probability of a dining hall being crowded is made of three normal distribution, with means of 8 (for breakfast), 13 (for lunch), and 18 (for dinner) all have $\sigma = 1$. Given that you're so busy and want to go to the dining hall when there are not so many people there, you have a few meetings, and also you don't want to go to campus on a rainy day, can you build a decision tree to tell you when should you go to a dining hall?
 
-	      In the binary attribute case, once the attribute is used to split the data, no more useful information can be gained from splitting on it gain.
-	      For example, if we split on the attribute "Morning?", then all data points on one side of the split will have the "Morning?" attribute set to true,
+	      In the binary attribute case, once the attribute is used to split the data, no more useful information can be gained from splitting on it again.
+	      For example, if we split on the attribute ``Morning?", then all data points on one side of the split will have the ``Morning?" attribute set to true,
 	      and all data points on the other side will have it set to false.
-	      Therefore, if split again on "Morning?" down either branch, no new information will be gained since all the data points on that branch already have the same value for that attribute.
+	      Therefore, if split again on ``Morning?" down either branch, no new information will be gained since all the data points on that branch already have the same value for that attribute.
 
 	      However, with a continuous attribute like \textbf{Time}, even after splitting once, there is still information to be gained down either branch.
-	      For example, if you split at $\tau = 12:00$, then on one side you have all data points with \textbf{Time} $\geq 12:00$.
+	      For example, if we split at $\tau = 12:00$, then on one side we have all data points with \textbf{Time} $\geq 12:00$.
 	      Splitting on \textbf{Time} again at a different time can help further partition the data.
 	      For example, on the branch where \textbf{Time} $\geq 12:00$, the data can be partitioned at a new split on \textbf{Time} such as 14:00.
 
@@ -256,30 +256,10 @@ For the following examples, let $p$ and $q$ be two points, $p_t$ and $q_t$ be th
 
 \section{Coding}
 
-Implement kNN in Python for handwritten digit classification and submit all codes and plots:
+\textit{Implement kNN in Python for handwritten digit classification and submit all codes and plots:}
 
-Download MNIST digit dataset (60,000 training and 10,000 testing data points) and the starter code from the course page. Each row in the matrix represents a handwritten digit image. The starter code shows how to visualize an example data point. The task is to predict the class (0 to 9) for a given test image, so it is a 10-way classification problem.
+Please see jupyter notebook file ``hw1.ipynb" for the implementation and results.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=.4\linewidth]{mnist-dataset.png}
-\end{figure}
-
-
-\begin{enumerate}
-
-
-	\item Write a Python function that implements kNN for this task and reports the accuracy for each class (10 numbers) as well as the average accuracy (one number).
-
-		      {\em [acc acc\_av] = kNN(images\_train, labels\_train, images\_test, labels\_test, k)}
-
-	      where {\em acc} is a vector of length 10 and {\em acc\_av} is a scalar. Look at a few correct and wrong predictions to see if it makes sense. To speed it up, in all experiments, you may use only the first 1000 testing images.
-
-	\item For $k=1$, change the number of training data points (30 to 10,000) to see the change in performance. Plot the average accuracy for 10 different dataset sizes. In the plot, x-axis is for the number of training data and y-axis is for the accuracy.
-
-	\item Show the effect of $k$ on the accuracy. Make a plot similar to the above one with multiple colored curves on the top of each other (each for a particular $k$ in [1 3 5 10].)
-
-	\item Choose the best $k$. First choose 2,000 training data randomly (to speed up the experiment). Then, split the training data randomly to two halves (the first for training and the second for cross-validation to choose the best $k$). Please plot the average accuracy wrt $k$ on the validation set. You may search for $k$ in this list: [1 3 5 10]. Finally, report the accuracy for the best $k$ on the testing data.
-
-\end{enumerate}
+\textbf{Note:} I included a brief bonus section at the end with extra results which may exceed 5 minutes runtime (although it was still under 5 minutes on my machine).
+You can skip running this section.
 \end{document}
