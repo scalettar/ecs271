@@ -1,0 +1,77 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+
+% Dafny code highlighting
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.97}
+
+%----------------------------------------------------------------------------------------
+
+\title{Unsupervised Anomaly Detection in Network Traffic using Deep Autoencoders}
+\author{Daniel Scalettar (scalettar@ucdavis.edu)}
+\date{ECS 271 - Project Proposal}
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\textit{Note on Group: I attempted to form a group in person and through piazza;
+however, as I was unable to find any members, I have framed this as a solo project.}
+
+\section{Problem}
+
+This project aims to address the problem of detecting novel, "zero-day,"
+network intrusions in high-volume traffic.
+The core challenge is to build a model that can create a robust,
+compressed representation of normal network behavior,
+allowing it to detect anomalies that deviate from this norm as potential intrusions.
+
+\section{Motivation}
+
+Typical supervised intrusion detection systems (IDS) are limited by their reliance
+on known attack signatures. The reliance on labeled data limits their ability
+to detect novel, "zero-day" attacks, which are not represented in the training data.
+Unsupervised anomaly-based detection systems address this limitation by learning
+a robust profile of normal network behavior from unlabeled data,
+and identify deviations from this profile as potential intrusions.
+However, simple unsupervised linear methods like PCA may fail to capture complex
+patterns in high-dimensional network traffic data.
+This project is motivated by the need for more effective unsupervised models,
+that can learn intricate, non-linear representations of normal network behavior.
+Deep autoencoders, with their ability to learn hierarchical feature representations,
+have shown promise in this regard and is an ongoing area of research. 
+
+\section{Dataset}
+
+This project will utilize the \textbf{CSE-CIC-IDS2018} dataset \cite{CICIDS2018}.
+This 
+
+\section{Methodology}
+
+
+%------------------------------------------------
+
+\begin{thebibliography}{9}
+
+	\bibitem{CICIDS2018}
+	Canadian Institute for Cybersecurity. (2018).
+	\newblock \textit{CSE-CIC-IDS2018 on AWS (CSE-CIC-IDS2018)}.
+	\newblock University of New Brunswick.
+	\newblock Retrieved October 6, 2025, from \url{https://www.unb.ca/cic/datasets/ids-2018.html}.
+
+\end{thebibliography}
+
+\end{document}
