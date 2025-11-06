@@ -30,7 +30,7 @@
 
 \section{Problem}
 
-This project aims to address the problem of detecting novel, "zero-day,"
+This project aims to address the problem of detecting novel, ``zero-day,"
 network intrusions in high-volume traffic.
 The core challenge is to build a model that can create a robust,
 compressed representation of normal network behavior,
@@ -41,10 +41,10 @@ allowing it to detect anomalies that deviate from this norm as potential intrusi
 Typical supervised intrusion detection systems (IDS) are limited by their reliance
 on known attack signatures. The reliance on labeled data limits their ability
 to detect novel, ``zero-day" attacks, which are not represented in the training data.
-Unsupervised anomaly-based detection systems address this limitation by learning
+Unsupervised, anomaly-based detection systems address this limitation by learning
 a robust profile of normal network behavior from unlabeled data,
 and identify deviations from this profile as potential intrusions.
-However, simple unsupervised linear methods like PCA may fail to capture complex
+However, simple unsupervised linear methods like Principal Component Analysis (PCA) may fail to capture complex
 patterns in high-dimensional network traffic data.
 This project is motivated by the need for more effective unsupervised models,
 that can learn intricate, non-linear representations of normal network behavior.
@@ -65,14 +65,14 @@ The proposed method is to implement a deep Stacked Autoencoder (SAE).
 
 \begin{enumerate}
 	\item \textbf{Data Sampling:} Due to the large dataset size, a representative subset of the data will be sampled.
-	      The training set will consist of \textbf{only benign traffic} to all the model to learn normal behavior.
+	      The training set will consist of \textbf{only benign traffic} to allow the model to learn normal behavior.
 	      The test set will include a stratified sample of both benign and attack traffic that preserves the original class distribution.
-	\item \textbf{Data Preprocessing:} Data cleaning by handling missing values (for example by imputation),
+	\item \textbf{Data Preprocessing:} This involves data cleaning by handling missing values (e.g., by imputation),
 	      feature selection and augmentation, categorical data encoding (e.g., one-hot encoding for protocol types),
 	      and feature scaling (e.g., min-max scaling).
 	\item \textbf{Baseline Model Implementation:} A simple linear PCA model will be implemented first as a baseline.
 	\item \textbf{Core Model Implementation:} A deep Stacked Autoencoder (SAE) will be implemented.
-	      The SAE will use a symmetric "bottleneck" architecture with multiple hidden layers.
+	      The SAE will use a symmetric ``bottleneck" architecture with multiple hidden layers.
 	      It will be trained on the completely benign training data and validated using a hold-out set also consisting of only benign data
 	      to monitor for overfitting.
 	      The trained model will be evaluated on the test set containing both benign and attack traffic.
