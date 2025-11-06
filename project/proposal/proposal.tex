@@ -28,9 +28,6 @@
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
 
-\textit{Note on Group: I attempted to form a group in person and through piazza;
-however, as I was unable to find any members, I have framed this as a solo project.}
-
 \section{Problem}
 
 This project aims to address the problem of detecting novel, "zero-day,"
@@ -43,7 +40,7 @@ allowing it to detect anomalies that deviate from this norm as potential intrusi
 
 Typical supervised intrusion detection systems (IDS) are limited by their reliance
 on known attack signatures. The reliance on labeled data limits their ability
-to detect novel, "zero-day" attacks, which are not represented in the training data.
+to detect novel, ``zero-day" attacks, which are not represented in the training data.
 Unsupervised anomaly-based detection systems address this limitation by learning
 a robust profile of normal network behavior from unlabeled data,
 and identify deviations from this profile as potential intrusions.
@@ -52,14 +49,41 @@ patterns in high-dimensional network traffic data.
 This project is motivated by the need for more effective unsupervised models,
 that can learn intricate, non-linear representations of normal network behavior.
 Deep autoencoders, with their ability to learn hierarchical feature representations,
-have shown promise in this regard and is an ongoing area of research. 
+have shown promise in this regard and is an ongoing area of research.
 
 \section{Dataset}
 
-This project will utilize the \textbf{CSE-CIC-IDS2018} dataset \cite{CICIDS2018}.
-This 
+This project utilizes the \textbf{CSE-CIC-IDS2018} dataset \cite{CICIDS2018}.
+The dataset is a modern, public benchmark for intrusion detection research.
+It contains over 16 million instances of network traffic, each with over 80 features,
+covering a wide range of contemporary attack types realistically distributed
+amongst a background of primarily benign traffic.
 
 \section{Methodology}
+
+The proposed method is to implement a deep Stacked Autoencoder (SAE).
+
+\begin{enumerate}
+	\item \textbf{Data Sampling:} Due to the large dataset size, a representative subset of the data will be sampled.
+	      The training set will consist of \textbf{only benign traffic} to all the model to learn normal behavior.
+	      The test set will include a stratified sample of both benign and attack traffic that preserves the original class distribution.
+	\item \textbf{Data Preprocessing:} Data cleaning by handling missing values (for example by imputation),
+	      feature selection and augmentation, categorical data encoding (e.g., one-hot encoding for protocol types),
+	      and feature scaling (e.g., min-max scaling).
+	\item \textbf{Baseline Model Implementation:} A simple linear PCA model will be implemented first as a baseline.
+	\item \textbf{Core Model Implementation:} A deep Stacked Autoencoder (SAE) will be implemented.
+	      The SAE will use a symmetric "bottleneck" architecture with multiple hidden layers.
+	      It will be trained on the completely benign training data and validated using a hold-out set also consisting of only benign data
+	      to monitor for overfitting.
+	      The trained model will be evaluated on the test set containing both benign and attack traffic.
+	      MSE reconstruction error between the original test samples and reconstructions will be used to identify anomalies.
+	\item \textbf{Hyperparameter Tuning:} Hyperparameters such as the dimension of the bottleneck layer,
+	      addition of dropout layers, L2 regularization, learning rate, etc. will be tuned to optimize performance.
+	\item \textbf{Evaluation:} The performance of the core SAE model and the baseline PCA model
+	      will be evaluated using metrics such as precision, recall, F1-score, and most importantly,
+	      the Area Under the Receiver Operating Characteristic Curve (AUC-ROC).
+	      Visualizations such as Reconstruction Error Histograms and t-SNE plots will also be used to illustrate model performance.
+\end{enumerate}
 
 
 %------------------------------------------------
