@@ -1,6 +1,7 @@
 # Project specific
 project-ideas.pdf 
 slides/
+data/
 
 # Data files
 *.mat
